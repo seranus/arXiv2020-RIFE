@@ -61,6 +61,7 @@ if torch.cuda.is_available():
 
 parser = argparse.ArgumentParser(description='Interpolation for a pair of images')
 parser.add_argument('--video', dest='video', required=True)
+parser.add_argument('--out', dest='out', required=True)
 parser.add_argument('--montage', dest='montage', action='store_true', help='montage origin video')
 parser.add_argument('--skip', dest='skip', action='store_true', help='whether to remove static frames before processing')
 parser.add_argument('--fps', dest='fps', type=int, default=None)
@@ -95,7 +96,10 @@ if args.png:
         os.mkdir('vid_out')
 else:
     video_path_wo_ext, ext = os.path.splitext(args.video)
-    vid_out = cv2.VideoWriter('{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext), fourcc, args.fps, (w, h))
+    if args.out:
+        vid_out = cv2.VideoWriter(args.out, fourcc, args.fps, (w, h))
+    else:
+        vid_out = cv2.VideoWriter('{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext), fourcc, args.fps, (w, h))
     
 def clear_buffer(user_args, buffer):
     cnt = 0
@@ -104,6 +108,7 @@ def clear_buffer(user_args, buffer):
         if item is None:
             break
         if user_args.png:
+            # needs to add custom location
             cv2.imwrite('vid_out/{:0>7d}.png'.format(cnt), item[:, :, ::-1])
             cnt += 1
         else:
@@ -178,5 +183,9 @@ if not vid_out is None:
 
 # move audio to new video file if appropriate
 if args.png == False and fpsNotAssigned == True:
-    outputVideoFileName = '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext)
+    if args.out:
+        outputVideoFileName = args.out
+    else:
+        outputVideoFileName = '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext)
+    print ('Merging audio with the new video file')
     transferAudio(video_path_wo_ext + "." + args.ext, outputVideoFileName)
