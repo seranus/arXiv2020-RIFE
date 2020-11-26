@@ -23,15 +23,16 @@ Our model can run 30+FPS for 2X 720p interpolation on a 2080Ti GPU. Currently ou
 ## Abstract
 We propose RIFE, a Real-time Intermediate Flow Estimation algorithm for Video Frame Interpolation (VFI). Most existing methods first estimate the bi-directional optical flows and then linearly combine them to approximate intermediate flows, leading to artifacts on motion boundaries. RIFE uses a neural network named IFNet that can directly estimate the intermediate flows from images. With the more precise flows and our simplified fusion process, RIFE can improve interpolation quality and have much better speed. Based on our proposed leakage distillation loss, RIFE can be trained in an end-to-end fashion. Experiments demonstrate that our method is significantly faster than existing VFI methods and can achieve state-of-the-art performance on public benchmarks. 
 
-## Dependencies
-```
-$ pip3 install tqdm
-$ pip3 install sk-video
-$ pip3 install torch
-$ pip3 install numpy
-$ pip3 install opencv-python
-```
 ## Usage
+
+### Installation
+
+```
+git clone git@github.com:hzwer/arXiv2020-RIFE.git
+cd arXiv2020-RIFE
+
+pip install -r requirements.txt
+```
 
 * Download the pretrained models from [here](https://drive.google.com/file/d/1zYc3PEN4t6GOUoVYJjvcXoMmM3kFDNGS/view?usp=sharing).
 We are optimizing the visual effects and will support animation in the future.
@@ -41,7 +42,9 @@ We are optimizing the visual effects and will support animation in the future.
 
 The models under different setting is coming soon.
 
-**Video 2x Interpolation**
+### Run
+
+**Video Frame Interpolation**
 
 You can use our [demo video](https://drive.google.com/file/d/1i3xlKb7ax7Y70khcTcuePi6E7crO_dFc/view?usp=sharing) or use your own video to process. 
 ```
@@ -55,7 +58,7 @@ $ python3 inference_video.py --exp=2 --video=video.mp4
 ```
 $ python3 inference_video.py --exp=2 --video=video.mp4 --fps=60
 ```
-(add slomo effect)
+(add slomo effect, the audio will be removed)
 ```
 $ python3 inference_video.py --video=video.mp4 --montage --png
 ```
@@ -87,11 +90,14 @@ First you should download [RIFE model reported by our paper](https://drive.googl
 
 We will release our training and benchmark validation code soon.
 
-**Vimeo90K**
-Download [Vimeo90K dataset](http://toflow.csail.mit.edu/) at ./vimeo_interp_test
+**Vimeo90K**: Download [Vimeo90K dataset](http://toflow.csail.mit.edu/) at ./vimeo_interp_test
+
+**MiddleBury**: Download [MiddleBury OTHER dataset](https://vision.middlebury.edu/flow/data/) at ./other-data and ./other-gt-interp
 ```
-$ python3 Vimeo90K_benchmark.py
-(You will get 35.695PSNR and 0.9788SSIM)
+$ python3 benchmark/Vimeo90K.py
+(Final result: "Avg PSNR: 35.695 SSIM: 0.9788")
+$ python3 benchmark/MiddelBury_Other.py
+(Final result: "2.058")
 ```
 
 ## Citation
@@ -108,7 +114,7 @@ $ python3 Vimeo90K_benchmark.py
 
 ## Reference
 Optical Flow:
-[ARFlow](https://github.com/lliuz/ARFlow)  [pytorch-liteflownet](https://github.com/sniklaus/pytorch-liteflownet)  [RAFT](https://github.com/princeton-vl/RAFT)
+[ARFlow](https://github.com/lliuz/ARFlow)  [pytorch-liteflownet](https://github.com/sniklaus/pytorch-liteflownet)  [RAFT](https://github.com/princeton-vl/RAFT)  [pytorch-PWCNet](https://github.com/sniklaus/pytorch-pwc)
 
 Video Interpolation:
-[DAIN](https://github.com/baowenbo/DAIN)  [CAIN](https://github.com/myungsub/CAIN)   [AdaCoF-pytorch](https://github.com/HyeongminLEE/AdaCoF-pytorch)
+[DAIN](https://github.com/baowenbo/DAIN)  [CAIN](https://github.com/myungsub/CAIN)  [AdaCoF-pytorch](https://github.com/HyeongminLEE/AdaCoF-pytorch) 

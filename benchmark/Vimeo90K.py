@@ -1,4 +1,6 @@
 import os
+import sys
+sys.path.append('.')
 import cv2
 import math
 import torch
@@ -7,7 +9,6 @@ import numpy as np
 from torch.nn import functional as F
 from pytorch_msssim import ssim_matlab
 from model.RIFE import Model
-
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = Model()
@@ -36,4 +37,4 @@ for i in f:
     psnr = -10 * math.log10(((I1 - mid) * (I1 - mid)).mean())
     psnr_list.append(psnr)
     ssim_list.append(ssim)
-    print(np.mean(psnr_list), np.mean(ssim_list))
+    print("Avg PSNR: {} SSIM: {}".format(np.mean(psnr_list), np.mean(ssim_list)))
