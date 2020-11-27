@@ -11,10 +11,13 @@ import skvideo.io
 from queue import Queue, Empty
 import moviepy.editor
 import shutil
+from pathlib import Path
+
+base_path = Path(__file__).parent
 
 def transferAudio(sourceVideo, targetVideo):
 
-    tempAudioFileName = "./temp/audio.mp3"
+    tempAudioFileName = os.path.join(base_path, 'temp', 'audio.mp3')
 
     try:
         # split audio from original video file and store in "temp" directory
@@ -26,12 +29,12 @@ def transferAudio(sourceVideo, targetVideo):
                 audio = video.audio
 
             # clear old "temp" directory if it exits
-            if os.path.isdir("temp"):
+            if os.path.isdir(os.path.join(base_path, 'temp')):
                 # remove temp directory
-                shutil.rmtree("temp")
+                shutil.rmtree(os.path.join(base_path, 'temp'))
 
             # create new "temp" directory
-            os.makedirs("temp")
+            os.makedirs(os.path.join(base_path, 'temp'))
 
             # write audio file to "temp" directory
             audio.write_audiofile(tempAudioFileName)
@@ -47,7 +50,7 @@ def transferAudio(sourceVideo, targetVideo):
         pass
 
     # remove temp directory
-    shutil.rmtree("temp")
+    shutil.rmtree(os.path.join(base_path, 'temp'))
 
 
 
@@ -74,7 +77,7 @@ args.exp = 2 ** args.exp
 
 from model.RIFE import Model
 model = Model()
-model.load_model('./train_log')
+model.load_model(os.path.join(base_path, 'train_log'))
 model.eval()
 model.device()
 
