@@ -93,7 +93,8 @@ else:
 videogen = skvideo.io.vreader(args.video)
 lastframe = next(videogen)
 h, w, _ = lastframe.shape
-fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+# fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+fourcc = cv2.VideoWriter_fourcc(*'H264')
 if args.png:
     if not os.path.exists('vid_out'):
         os.mkdir('vid_out')
