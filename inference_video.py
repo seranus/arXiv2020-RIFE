@@ -52,7 +52,14 @@ def transferAudio(sourceVideo, targetVideo):
     # remove temp directory
     shutil.rmtree(os.path.join(base_path, 'temp'))
 
+def transcode_to_h264(sourceVideo, targetVideo):
+    try:
+        os.system("ffmpeg -y -i " + sourceVideo + " -vcodec libx264 -acodec aac " + targetVideo)
 
+        # remove video
+        os.remove(sourceVideo)
+    except:
+        pass
 
 warnings.filterwarnings("ignore")
 
@@ -93,17 +100,17 @@ else:
 videogen = skvideo.io.vreader(args.video)
 lastframe = next(videogen)
 h, w, _ = lastframe.shape
-# fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
-fourcc = cv2.VideoWriter_fourcc(*'H264')
+fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
+
+video_path_wo_ext, ext = os.path.splitext(args.video)
+video_path = os.path.join(base_path, 'demo', '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext), fourcc, args.fps, (w, h))
+
 if args.png:
     if not os.path.exists('vid_out'):
         os.mkdir('vid_out')
 else:
-    video_path_wo_ext, ext = os.path.splitext(args.video)
-    if args.out:
-        vid_out = cv2.VideoWriter(args.out, fourcc, args.fps, (w, h))
-    else:
-        vid_out = cv2.VideoWriter('{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext), fourcc, args.fps, (w, h))
+    # vid_out = cv2.VideoWriter('{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext), fourcc, args.fps, (w, h))
+    vid_out = cv2.VideoWriter(video_path)
     
 def clear_buffer(user_args, buffer):
     cnt = 0
@@ -185,11 +192,13 @@ pbar.close()
 if not vid_out is None:
     vid_out.release()
 
+ outputVideoFileName = '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext)
+
 # move audio to new video file if appropriate
 if args.png == False and fpsNotAssigned == True:
-    if args.out:
-        outputVideoFileName = args.out
-    else:
-        outputVideoFileName = '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext)
     print ('Merging audio with the new video file')
-    transferAudio(video_path_wo_ext + "." + args.ext, outputVideoFileName)
+    transferAudio(video_path, outputVideoFileName)
+
+if args.out:
+    print ('Converting MP4V into h264')
+    transcode_to_h264(video_path, args.out)
