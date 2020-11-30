@@ -103,7 +103,7 @@ h, w, _ = lastframe.shape
 fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
 
 video_path_wo_ext, ext = os.path.splitext(args.video)
-video_path = os.path.join(base_path, 'demo', '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext), fourcc, args.fps, (w, h))
+video_path = os.path.join(base_path, 'demo', '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext))
 
 if args.png:
     if not os.path.exists('vid_out'):
