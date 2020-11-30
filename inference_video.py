@@ -110,7 +110,7 @@ if args.png:
         os.mkdir('vid_out')
 else:
     # vid_out = cv2.VideoWriter('{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext), fourcc, args.fps, (w, h))
-    vid_out = cv2.VideoWriter(video_path)
+    vid_out = cv2.VideoWriter(video_path, fourcc, args.fps, (w, h))
     
 def clear_buffer(user_args, buffer):
     cnt = 0
