@@ -197,7 +197,7 @@ outputVideoFileName = '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(
 # move audio to new video file if appropriate
 if args.png == False and fpsNotAssigned == True:
     print ('Merging audio with the new video file')
-    transferAudio(video_path, outputVideoFileName)
+    transferAudio(args.video, video_path)
 
 if args.out:
     print ('Converting MP4V into h264')
