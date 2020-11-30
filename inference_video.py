@@ -192,7 +192,7 @@ pbar.close()
 if not vid_out is None:
     vid_out.release()
 
- outputVideoFileName = '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext)
+outputVideoFileName = '{}_{}X_{}fps.{}'.format(video_path_wo_ext, args.exp, int(np.round(args.fps)), args.ext)
 
 # move audio to new video file if appropriate
 if args.png == False and fpsNotAssigned == True:
